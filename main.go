@@ -8,6 +8,45 @@ import (
 
 func main() {
 	router := gin.Default()
+
+	// Global middleware
+	// Logger middleware will write the logs to gin.DefaultWriter even if you set with GIN_MODE=release.
+	// By default gin.DefaultWriter = os.Stdout
+	router.Use(gin.Logger())
+
+	// Recovery middleware recovers from any panics and writes a 500 if there was one.
+	router.Use(gin.Recovery())
+
+	// Per route middleware, you can add as many as you desire.
+	router.GET("/benchmark", func(c *gin.Context) {}, func(c *gin.Context) {})
+
+	// Authorization group
+	// authorized := r.Group("/", AuthRequired())
+	// exactly the same as:
+	authorized := router.Group("/")
+	// per group middleware! in this case we use the custom created
+	// AuthRequired() middleware just in the "authorized" group.
+	authorized.Use(func(c *gin.Context) {})
+	{
+		authorized.POST("/login", func(c *gin.Context) {})
+		authorized.POST("/submit", func(c *gin.Context) {})
+		authorized.POST("/read", func(c *gin.Context) {})
+
+		// nested group
+		testing := authorized.Group("testing")
+		{
+			testing.GET("/analytics", func(c *gin.Context) {})
+		}
+	}
+
+	// Simple group: v1
+	v1 := router.Group("/v1")
+	{
+		v1.POST("/login", func(c *gin.Context) {})
+		v1.POST("/submit", func(c *gin.Context) {})
+		v1.POST("/read", func(c *gin.Context) {})
+	}
+
 	router.GET("/ping", func(c *gin.Context) {
 		name := c.Query("name")
 		c.JSON(http.StatusOK, gin.H{
