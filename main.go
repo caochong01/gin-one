@@ -39,6 +39,7 @@ func main() {
 		panic(err)
 	}
 	db.DB()
+
 	//result := db.Create(&entity.Diary{
 	//	DiaryTitle:  "nihao",
 	//	DiaryDetail: "nihaocontent",
