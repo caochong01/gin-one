@@ -69,7 +69,14 @@ func main() {
 	result = db.Last(&entity.Diary{})
 	fmt.Println(result.Error, result.RowsAffected)
 	// 获取全部记录
-	result = db.Find(&entity.Diary{})
+	rows, err := db.Find(&entity.Diary{}).Rows()
+	for rows.Next() {
+		columns, errs := rows.Columns()
+		if errs != nil {
+			panic(errs)
+		}
+		fmt.Println(columns)
+	}
 	fmt.Println("获取全部记录: ", result.Error, result.RowsAffected)
 
 	routerUrl(router)
