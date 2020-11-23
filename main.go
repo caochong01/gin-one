@@ -1,7 +1,9 @@
 package main
 
 import (
+	"errors"
 	"fmt"
+	"github.com/caochong01/gin-one/entity"
 	"github.com/gin-gonic/gin"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -38,21 +40,44 @@ func main() {
 		fmt.Println("数据库连接异常错误：")
 		panic(err)
 	}
-	db.DB()
 
-	//result := db.Create(&entity.Diary{
-	//	DiaryTitle:  "nihao",
-	//	DiaryDetail: "nihaocontent",
-	//})
-	//fmt.Println(result.Error)
-	//fmt.Println(result.RowsAffected)
+	var diary entity.Diary
+	var count int64
+
+	// 获取全部记录
+	result := db.Find(&diary).Count(&count)
+	fmt.Println("获取全部记录: ", count, result.Error, result.RowsAffected)
+
+	result = db.Create(&entity.Diary{
+		DiaryTitle:  "nihao",
+		DiaryDetail: "nihaocontent",
+	})
+	fmt.Println(result.Error, result.RowsAffected)
+
+	// 获取第一条记录（主键升序）
+	// SELECT * FROM users ORDER BY id LIMIT 1;
+	result = db.First(&entity.Diary{})
+	fmt.Println(result.Error, result.RowsAffected)
+	// 检查 ErrRecordNotFound 错误
+	errors.Is(result.Error, gorm.ErrRecordNotFound)
+	// 获取一条记录，没有指定排序字段
+	// SELECT * FROM users LIMIT 1;
+	result = db.Take(&entity.Diary{})
+	fmt.Println(result.Error, result.RowsAffected)
+	// 获取最后一条记录（主键降序）
+	// SELECT * FROM users ORDER BY id DESC LIMIT 1;
+	result = db.Last(&entity.Diary{})
+	fmt.Println(result.Error, result.RowsAffected)
+	// 获取全部记录
+	result = db.Find(&entity.Diary{})
+	fmt.Println("获取全部记录: ", result.Error, result.RowsAffected)
 
 	routerUrl(router)
-	runErr := router.Run() // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
-	if runErr != nil {
-		fmt.Println("服务启动异常错误：")
-		panic(runErr)
-	}
+	//runErr := router.Run() // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
+	//if runErr != nil {
+	//	fmt.Println("服务启动异常错误：")
+	//	panic(runErr)
+	//}
 }
 
 func routerUrl(router *gin.Engine) {
