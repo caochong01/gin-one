@@ -23,6 +23,10 @@ type Diary struct {
 //	return "diary"
 //}
 
+func (diary *Diary) TableName() string {
+	return "diary"
+}
+
 type Comment struct {
 	Model
 	DiaryId        uint
