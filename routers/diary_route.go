@@ -8,8 +8,9 @@ import (
 func diaryRoute(router *gin.Engine, api api.DiaryApi) {
 	diaryGroup := router.Group("/diary")
 	{
-		diaryGroup.GET("/addDiary", api.AddDiary())
-		diaryGroup.GET("/updateDiary", api.UpdateDiary())
-		diaryGroup.GET("/delDiary", api.DelDiary())
+		diaryGroup.GET("/getDiary", api.GetDiary())
+		diaryGroup.POST("/addDiary", api.AddDiary())
+		diaryGroup.PUT("/updateDiary", api.UpdateDiary())
+		diaryGroup.DELETE("/delDiary", api.DelDiary())
 	}
 }

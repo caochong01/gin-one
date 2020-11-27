@@ -7,7 +7,7 @@ import (
 
 func MainRouters(router *gin.Engine) {
 	// 日记模块路由
-	diaryRoute(router, &impl.Diary{})
+	diaryRoute(router, &impl.DiaryImpl{})
 
 	// TODO ...
 

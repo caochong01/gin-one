@@ -15,34 +15,22 @@ type Model struct {
 
 type Diary struct {
 	Model
-	DiaryTitle  string
-	DiaryDetail string
+	DiaryTitle  string `form:"diaryTitle" json:"diaryTitle" binding:"required"`
+	DiaryDetail string `form:"diaryDetail" json:"diaryDetail" binding:"required"`
 }
 
 //func (diary *Diary) TableName() string {
 //	return "diary"
 //}
 
-func (diary *Diary) TableName() string {
-	return "diary"
-}
-
 type Comment struct {
 	Model
-	DiaryId        uint
-	CommentContent string
+	DiaryId        uint   `form:"diaryId" json:"diaryId" binding:"required"`
+	CommentContent string `form:"commentContent" json:"commentContent" binding:"required"`
 }
-
-//func (comment *Comment) TableName() string {
-//	return "comment"
-//}
 
 type Praise struct {
 	Model
-	DiaryId   uint
-	PraiseNum uint
+	DiaryId   uint `form:"diaryId" json:"diaryId" binding:"required"`
+	PraiseNum uint `form:"praiseNum" json:"praiseNum" binding:"required"`
 }
-
-//func (praise *Praise) TableName() string {
-//	return "praise"
-//}

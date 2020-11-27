@@ -8,4 +8,6 @@ type DiaryApi interface {
 	UpdateDiary() gin.HandlerFunc
 
 	DelDiary() gin.HandlerFunc
+
+	GetDiary() gin.HandlerFunc
 }
